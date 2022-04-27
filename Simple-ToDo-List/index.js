@@ -1,46 +1,43 @@
 function App(){
-    const [todos, setTodos] = React.useState([
-      {
-        text: 'learn react',
-        isCompleted: false,
-      },
-      {
-        text: 'meet friend for lunch',
-        isCompleted: false,
-      },
-      {
-        text: 'build todo app',
-        isCompleted: false,
-      }        
-    ])
-  
-    const [value, setValue] = React.useState("");
-    const handleSubmit = e => {
-        e.preventDefault();
-        console.log('e:', e);
-        if (!value) return;
-        const newToDos = [...todos, {text:value, isCompleted: false}];
-        setTodos(newToDos);
-        setValue('');
-    }
+  const [todos, setTodos] = React.useState([
+    {
+      text: 'learn react',
+      isCompleted: false,
+    },
+    {
+      text: 'meet friend for lunch',
+      isCompleted: false,
+    },
+    {
+      text: 'build todo app',
+      isCompleted: false,
+    }        
+  ]);
 
-    return(
-      <>
-        {todos.map((todo, i) => <div className="todo" key={i}>{todo.text}</div>)}
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                className="input"
-                value={value}
-                placeholder="Add Todo..."
-                onChange={e => setValue(e.target.value)}
-            />
-        </form>
-      </>
-    );
+  const addTodo = text => {
+    const newTodos = [...todos, {text, isCompleted:false}];
+    setTodos(newTodos);
   }
 
-ReactDOM.render(
-    <App/>,
-    document.getElementById('root')
+  const removeTodo = index => {
+    let temp = [...todos];    
+    temp.splice(index, 1);
+    setTodos(temp);
+  }
+
+  return(
+    <div className="app">
+      <div className="todo-list">
+        {todos.map((todo, i) => (
+          <Todo index={i} key={i} todo={todo} remove={removeTodo} />
+        ))}
+        <TodoForm addTodo={addTodo} />
+      </div>
+    </div>
   );
+}
+
+ReactDOM.render(
+  <App/>,
+  document.getElementById('root')
+);
